@@ -18,6 +18,27 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="camera.hpp" />
+    <ClInclude Include="config.hpp" />
+    <ClInclude Include="draw.hpp" />
+    <ClInclude Include="engine.hpp" />
+    <ClInclude Include="graphics.hpp" />
+    <ClInclude Include="mesh.hpp" />
+    <ClInclude Include="shader.hpp" />
+    <ClInclude Include="shapes.hpp" />
+    <ClInclude Include="uihelper.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="constant2d.frag" />
+    <None Include="constant2d.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="todo.txt" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{26aa0a18-4f49-430c-824e-1ed20e39f667}</ProjectGuid>
@@ -70,8 +91,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(ProjectDir)\Libraries\glew-2.0.0\include;$(ProjectDir)\Libraries\glm-0.9.8.4;$(ProjectDir)\Libraries\SDL2-devel-2.0.5-VC\SDL2-2.0.5\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)\Libraries\glew-2.0.0\lib\Release\Win32;$(ProjectDir)\Libraries\SDL2-devel-2.0.5-VC\SDL2-2.0.5\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)\Libraries\Box2D;$(ProjectDir)\Libraries\glew-2.0.0\include;$(ProjectDir)\Libraries\glm-0.9.8.4;$(ProjectDir)\Libraries\SDL2-devel-2.0.5-VC\SDL2-2.0.5\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)\Libraries\Box2D;$(ProjectDir)\Libraries\glew-2.0.0\lib\Release\Win32;$(ProjectDir)\Libraries\SDL2-devel-2.0.5-VC\SDL2-2.0.5\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -80,7 +101,7 @@
       <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;opengl32.lib;glu32.lib;glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;opengl32.lib;glu32.lib;glew32s.lib;Box2D.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
     </Link>
   </ItemDefinitionGroup>
@@ -117,9 +138,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="test.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
