@@ -37,28 +37,6 @@ public:
 
 	b2World *world;
 
-	// --------------------------------- 3 static shape definitions -----------------------------
-	b2Body				   *wallsbody;
-	b2Body			   *redCirclebody;
-	b2Body				*whiteBoxbody;
-
-	b2BodyDef		     wallsBodyDef;
-	b2BodyDef		 redCircleBodyDef;
-	b2BodyDef		  whiteBoxBodyDef;
-
-	b2FixtureDef      wallsFixtureDef;
-	b2FixtureDef  redCircleFixtureDef;
-	b2FixtureDef   whiteBoxFixtureDef;
-
-	// --------------------------------- generic dynamic definitions -----------------------------
-	b2BodyDef		 polyLineBodyDef;
-	b2BodyDef		   CircleBodyDef;
-	b2BodyDef		      BoxBodyDef;
-
-	b2FixtureDef  polyLineFixtureDef;
-	b2FixtureDef    CircleFixtureDef;
-	b2FixtureDef       BoxFixtureDef;
-
     PencilPhysics() {
         worldMin = vec2(-8, 0);
         worldMax = vec2(8, 9);
@@ -120,7 +98,7 @@ public:
     }
 
     void addPolyline(vector<vec2> vertices) {
-        polylines.push_back(Polyline(vertices, world, b2_staticBody));
+        polylines.push_back(Polyline(vertices, world, b2_dynamicBody));
     }
 
     void clear() {
@@ -178,12 +156,12 @@ public:
         draw.circle(mat4(), redCircle.center, redCircle.radius, vec3(1,0,0));
         draw.box(mat4(), whiteBox.center, whiteBox.size, vec3(1,1,1));
         // Draw all the other circles, boxes, and polylines
-        for (int i = 0; i < circles.size(); i++)
-            draw.circle(circles[i].getTransformation(), circles[i].center, circles[i].radius, vec3(0,0,0));
-        for (int i = 0; i < boxes.size(); i++)
-            draw.box(boxes[i].getTransformation(), boxes[i].center, boxes[i].size, vec3(0,0,0));
-        for (int i = 0; i < polylines.size(); i++)
-            draw.polyline(polylines[i].getTransformation(), polylines[i].vertices, vec3(0,0,0));
+		for (int i = 0; i < circles.size(); i++)
+			draw.circle(getMatrix()*circles[i].getTransformation(), circles[i].center, circles[i].radius, vec3(0, 0, 0));
+		for (int i = 0; i < boxes.size(); i++)
+			draw.box(getMatrix()*boxes[i].getTransformation(), boxes[i].center, boxes[i].size, vec3(0, 0, 0));
+		for (int i = 0; i < polylines.size(); i++)
+			draw.polyline(getMatrix()*polylines[i].getTransformation(), polylines[i].vertices, vec3(0, 0, 0));
 
         // Finish
         SDL_GL_SwapWindow(window);

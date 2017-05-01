@@ -56,7 +56,7 @@ public:
 	mat4 getTransformation() {
 		b2Vec2 pos = body->GetPosition();
 		float angle = body->GetAngle();
-		return getMatrix()*glm::translate(vec3(pos.x, pos.y, 0))*glm::rotate(angle, vec3(0, 0, 1));
+		return glm::translate(vec3(pos.x, pos.y, 0))*glm::rotate(angle, vec3(0, 0, 1));
 	}
     void destroy() {}
 };
@@ -97,7 +97,7 @@ public:
 	mat4 getTransformation() {
 		b2Vec2 pos = body->GetPosition();
 		float angle = body->GetAngle();
-		return getMatrix()*glm::translate(vec3(pos.x, pos.y, 0))*glm::rotate(angle, vec3(0, 0, 1));
+		return glm::translate(vec3(pos.x, pos.y, 0))*glm::rotate(angle, vec3(0, 0, 1));
 	}
     void destroy() {}
 };
@@ -134,7 +134,7 @@ public:
 	mat4 getTransformation() {
 		b2Vec2 pos = body->GetPosition();
 		float angle = body->GetAngle();
-		return getMatrix()*glm::translate(vec3(pos.x, pos.y, 0))*glm::rotate(angle, vec3(0, 0, 1));
+		return glm::translate(vec3(pos.x, pos.y, 0))*glm::rotate(angle, vec3(0, 0, 1));
 	}
     void destroy() {}
 };
