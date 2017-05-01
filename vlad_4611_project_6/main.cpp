@@ -8,6 +8,7 @@
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 #include <vector>
+#include <stdlib.h>     //for using the function sleep
 
 #include <Box2D/Box2D.h>
 
@@ -35,7 +36,28 @@ public:
     vec2 worldMin, worldMax;
 
 	b2World *world;
-	b2Body *body;
+
+	// --------------------------------- 3 static shape definitions -----------------------------
+	b2Body				   *wallsbody;
+	b2Body			   *redCirclebody;
+	b2Body				*whiteBoxbody;
+
+	b2BodyDef		     wallsBodyDef;
+	b2BodyDef		 redCircleBodyDef;
+	b2BodyDef		  whiteBoxBodyDef;
+
+	b2FixtureDef      wallsFixtureDef;
+	b2FixtureDef  redCircleFixtureDef;
+	b2FixtureDef   whiteBoxFixtureDef;
+
+	// --------------------------------- generic dynamic definitions -----------------------------
+	b2BodyDef		 polyLineBodyDef;
+	b2BodyDef		   CircleBodyDef;
+	b2BodyDef		      BoxBodyDef;
+
+	b2FixtureDef  polyLineFixtureDef;
+	b2FixtureDef    CircleFixtureDef;
+	b2FixtureDef       BoxFixtureDef;
 
     PencilPhysics() {
         worldMin = vec2(-8, 0);
@@ -66,21 +88,10 @@ public:
         wallVerts.push_back(vec2(worldMin.x, worldMin.y));
         wallVerts.push_back(vec2(worldMax.x, worldMin.y));
         wallVerts.push_back(vec2(worldMax.x, worldMax.y));
-        walls = Polyline(wallVerts);
+		walls = Polyline(wallVerts, world, b2_staticBody);
         // Create two static bodies
-        redCircle = Circle(vec2(-5,2), 0.5);
-        whiteBox = Box(vec2(5,2), vec2(0.9,0.9));
-
-		//b2BodyDef wallBodyDef;
-		//b2BodyDef redCircleBodyDef;
-		//b2BodyDef whiteBoxBodyDef;
-
-		//wallBodyDef.type;
-		//redCircleBodyDef;
-		//whiteBoxBodyDef;
-
-
-
+        redCircle = Circle(vec2(-5,2), 0.5, world, b2_staticBody, 0.0);
+        whiteBox = Box(vec2(5,2), vec2(0.9,0.9), world, b2_staticBody, 0.0);
 
     }
 
@@ -100,16 +111,16 @@ public:
 
     void addCircle() {
         vec2 position = vec2(-5,7) + 0.5*randomVec2();
-        circles.push_back(Circle(position, 0.5));
+        circles.push_back(Circle(position, 0.5, world, b2_dynamicBody, 0.0));
     }
 
     void addBox() {
         vec2 position = vec2(-5,7) + 0.5*randomVec2();
-        boxes.push_back(Box(position, vec2(1.2,0.6)));
+        boxes.push_back(Box(position, vec2(1.2,0.6), world, b2_dynamicBody, 0.0));
     }
 
     void addPolyline(vector<vec2> vertices) {
-        polylines.push_back(Polyline(vertices));
+        polylines.push_back(Polyline(vertices, world, b2_staticBody));
     }
 
     void clear() {
@@ -141,9 +152,9 @@ public:
     }
 
     void advanceState(float dt) {
-
-        // TODO: Step the Box2D world by dt.
-
+		
+        // TODO: DONE? Step the Box2D world by dt.
+		world->Step(dt, 8, 3);
     }
 
     void drawGraphics() {
