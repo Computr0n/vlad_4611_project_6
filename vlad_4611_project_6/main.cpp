@@ -98,7 +98,7 @@ public:
     }
 
     void addPolyline(vector<vec2> vertices) {
-        polylines.push_back(Polyline(vertices, world, b2_dynamicBody));
+        polylines.push_back(Polyline(vertices, world, b2_staticBody));
     }
 
     void clear() {
@@ -156,12 +156,15 @@ public:
         draw.circle(mat4(), redCircle.center, redCircle.radius, vec3(1,0,0));
         draw.box(mat4(), whiteBox.center, whiteBox.size, vec3(1,1,1));
         // Draw all the other circles, boxes, and polylines
+
+		glm::mat4 mat = getMatrix();
+
 		for (int i = 0; i < circles.size(); i++)
-			draw.circle(getMatrix()*circles[i].getTransformation(), circles[i].center, circles[i].radius, vec3(0, 0, 0));
+			draw.circle(mat*circles[i].getTransformation(), vec2(), circles[i].radius, vec3(0, 0, 0));
 		for (int i = 0; i < boxes.size(); i++)
-			draw.box(getMatrix()*boxes[i].getTransformation(), boxes[i].center, boxes[i].size, vec3(0, 0, 0));
+			draw.box(mat*boxes[i].getTransformation(), vec2(), boxes[i].size, vec3(0, 0, 0));
 		for (int i = 0; i < polylines.size(); i++)
-			draw.polyline(getMatrix()*polylines[i].getTransformation(), polylines[i].vertices, vec3(0, 0, 0));
+			draw.polyline(mat*polylines[i].getTransformation(), polylines[i].vertices, vec3(0, 0, 0));
 
         // Finish
         SDL_GL_SwapWindow(window);

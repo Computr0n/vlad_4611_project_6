@@ -41,7 +41,6 @@ public:
 		body = world->CreateBody(&bodydef);
 
 		b2CircleShape shape;
-		shape.m_p.Set(center.x, center.y);
 		shape.m_radius = radius;
 
 		b2FixtureDef fixturedef;
@@ -58,7 +57,9 @@ public:
 		float angle = body->GetAngle();
 		return glm::translate(vec3(pos.x, pos.y, 0))*glm::rotate(angle, vec3(0, 0, 1));
 	}
-    void destroy() {}
+    void destroy() {
+		body->DestroyFixture(fixture);
+	}
 };
 
 class Box {
@@ -83,7 +84,7 @@ public:
 		body = world->CreateBody(&bodydef);
 
 		b2PolygonShape shape;
-		shape.SetAsBox(size.x / 2, size.y / 2, b2Vec2(center.x, center.y), 0.0);
+		shape.SetAsBox(size.x / 2, size.y / 2);
 
 		b2FixtureDef fixturedef;
 		fixturedef.shape = &shape;
@@ -99,7 +100,9 @@ public:
 		float angle = body->GetAngle();
 		return glm::translate(vec3(pos.x, pos.y, 0))*glm::rotate(angle, vec3(0, 0, 1));
 	}
-    void destroy() {}
+    void destroy() {
+		body->DestroyFixture(fixture);
+	}
 };
 
 class Polyline {
@@ -136,7 +139,9 @@ public:
 		float angle = body->GetAngle();
 		return glm::translate(vec3(pos.x, pos.y, 0))*glm::rotate(angle, vec3(0, 0, 1));
 	}
-    void destroy() {}
+    void destroy() {
+		body->DestroyFixture(fixture);
+	}
 };
 
 #endif
