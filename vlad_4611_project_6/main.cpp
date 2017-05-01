@@ -8,6 +8,9 @@
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 #include <vector>
+
+#include <Box2D/Box2D.h>
+
 using namespace std;
 using glm::vec2;
 using glm::vec3;
@@ -31,6 +34,9 @@ public:
 
     vec2 worldMin, worldMax;
 
+	b2World *world;
+	b2Body *body;
+
     PencilPhysics() {
         worldMin = vec2(-8, 0);
         worldMax = vec2(8, 9);
@@ -39,6 +45,7 @@ public:
         uiHelper = UIHelper(this, worldMin, worldMax, 1280, 720);
         draw = Draw(this);
         // Initialize world
+
         initWorld();
     }
 
@@ -50,6 +57,8 @@ public:
 
         // TODO: Create a Box2D world and make these shapes static
         // bodies in it.
+		
+		world = new b2World(b2Vec2(0., -9.8)); //gravity
 
         // Create walls
         vector<vec2> wallVerts;
@@ -61,6 +70,18 @@ public:
         // Create two static bodies
         redCircle = Circle(vec2(-5,2), 0.5);
         whiteBox = Box(vec2(5,2), vec2(0.9,0.9));
+
+		//b2BodyDef wallBodyDef;
+		//b2BodyDef redCircleBodyDef;
+		//b2BodyDef whiteBoxBodyDef;
+
+		//wallBodyDef.type;
+		//redCircleBodyDef;
+		//whiteBoxBodyDef;
+
+
+
+
     }
 
     void run() {
