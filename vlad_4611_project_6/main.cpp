@@ -179,11 +179,11 @@ public:
         draw.box(mat4(), whiteBox.center, whiteBox.size, vec3(1,1,1));
         // Draw all the other circles, boxes, and polylines
         for (int i = 0; i < circles.size(); i++)
-            draw.circle(mat4(), circles[i].center, circles[i].radius, vec3(0,0,0));
+            draw.circle(circles[i].getTransformation(), circles[i].center, circles[i].radius, vec3(0,0,0));
         for (int i = 0; i < boxes.size(); i++)
-            draw.box(mat4(), boxes[i].center, boxes[i].size, vec3(0,0,0));
+            draw.box(boxes[i].getTransformation(), boxes[i].center, boxes[i].size, vec3(0,0,0));
         for (int i = 0; i < polylines.size(); i++)
-            draw.polyline(mat4(), polylines[i].vertices, vec3(0,0,0));
+            draw.polyline(polylines[i].getTransformation(), polylines[i].vertices, vec3(0,0,0));
 
         // Finish
         SDL_GL_SwapWindow(window);
