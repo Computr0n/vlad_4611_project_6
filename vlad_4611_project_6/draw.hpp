@@ -13,7 +13,7 @@ class Draw {
 public:
     Engine *engine;
     ShaderProgram shader;
-    Mesh2D circleMesh, boxMesh, polylineMesh;
+    Mesh2D arrowMesh, circleMesh, boxMesh, polylineMesh;
     int maxVerts;
     Draw() {}
     Draw(Engine *engine);
@@ -21,6 +21,7 @@ public:
     void circle(mat4 transform, vec2 center, float radius, vec3 color);
     void box(mat4 transform, vec2 center, vec2 size, vec3 color);
     void polyline(mat4 transform, std::vector<vec2> vertices, vec3 color);
+    void axes(mat4 transform, float size);
 };
 
 inline Draw::Draw(Engine *engine) {
@@ -35,6 +36,14 @@ inline Draw::Draw(Engine *engine) {
     for (int i = 0; i < maxVerts-1; i++)
         polylineMesh.edges.push_back(ivec2(i,i+1));
     polylineMesh.createGPUData(engine);
+    arrowMesh.vertices.push_back(vec2(0,0));
+    arrowMesh.vertices.push_back(vec2(1,0));
+    arrowMesh.vertices.push_back(vec2(0.7,0.1));
+    arrowMesh.vertices.push_back(vec2(0.7,-0.1));
+    arrowMesh.edges.push_back(ivec2(0,1));
+    arrowMesh.edges.push_back(ivec2(1,2));
+    arrowMesh.edges.push_back(ivec2(1,3));
+    arrowMesh.createGPUData(engine);
 }
 
 inline void Draw::mesh(mat4 transform, Mesh2D &mesh, vec3 color, int nElements) {
@@ -70,6 +79,13 @@ inline void Draw::polyline(mat4 transform, std::vector<vec2> vertices, vec3 colo
                                &vertices[start], (end-start)*sizeof(vec2));
         mesh(transform, polylineMesh, color, end-start-1);
     }
+}
+
+inline void Draw::axes(mat4 transform, float size) {
+    transform = glm::scale(transform, vec3(size,size,size));
+    mesh(transform, arrowMesh, vec3(1,0,0));
+    transform = glm::rotate(transform, (float)M_PI/2, vec3(0,0,1));
+    mesh(transform, arrowMesh, vec3(0,0.8,0));
 }
 
 #endif
