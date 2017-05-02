@@ -37,10 +37,16 @@ public:
 
 	b2World *world;
 
+	b2BodyDef mouseBodydef;
+	b2Body *mouseBody;
+	b2MouseJoint *mj;
+
+	int count;
+
     PencilPhysics() {
         worldMin = vec2(-8, 0);
         worldMax = vec2(8, 9);
-        window = createWindow("4611", 1280, 720);
+        window = createWindow("Vladimir Kuksenko <kukse004> - 4611 Assignment 6", 1280, 720);
         camera = Camera2D(worldMin, worldMax);
         uiHelper = UIHelper(this, worldMin, worldMax, 1280, 720);
         draw = Draw(this);
@@ -55,7 +61,7 @@ public:
 
     void initWorld() {
 
-        // TODO: Create a Box2D world and make these shapes static
+        // TODO: DONE? Create a Box2D world and make these shapes static
         // bodies in it.
 		
 		world = new b2World(b2Vec2(0., -9.8)); //gravity
@@ -149,7 +155,7 @@ public:
         if (currentPolyline.size() >= 2)
             draw.polyline(mat4(), currentPolyline, vec3(0.6,0.6,0.6));
 
-        // TODO: Modify these draw calls to draw the bodies with the
+        // TODO: DONE? Modify these draw calls to draw the bodies with the
         // correct positions and angles.
 
         // Draw red circle and white box.
@@ -165,6 +171,12 @@ public:
 			draw.box(mat*boxes[i].getTransformation(), vec2(), boxes[i].size, vec3(0, 0, 0));
 		for (int i = 0; i < polylines.size(); i++)
 			draw.polyline(mat*polylines[i].getTransformation(), polylines[i].vertices, vec3(0, 0, 0));
+
+		if (mj) {
+			mat4 transform = mat4()*glm::translate(vec3(mj->GetTarget().x, mj->GetTarget().y, 0));
+			draw.axes(transform, .1);
+		}
+			
 
         // Finish
         SDL_GL_SwapWindow(window);
@@ -185,6 +197,32 @@ public:
         //   frequencyHz: 2
         //   dampingRatio: 0.5
 
+		b2MouseJointDef mjDef;
+		mjDef.collideConnected = true;
+		mjDef.maxForce = 100.0;
+		mjDef.frequencyHz = 2.0;
+		mjDef.dampingRatio = 0.5;
+		mjDef.bodyA = walls.body;
+		mjDef.target.Set(worldPoint.x, worldPoint.y);
+
+		b2Joint* j;
+
+		for (int i = 0; i < circles.size(); i++) {
+			if (circles[i].contains(worldPoint)) {
+				mjDef.bodyB = circles[i].body;
+				mj = (b2MouseJoint*)world->CreateJoint(&mjDef);
+				break;
+			}
+		}
+		for (int i = 0; i < boxes.size(); i++) {
+			if (boxes[i].contains(worldPoint)) {
+				mjDef.bodyB = boxes[i].body;
+				mj = (b2MouseJoint*)world->CreateJoint(&mjDef);
+				break;
+			}
+		}
+
+	    j;
     }
 
     void moveMouse(vec2 worldPoint) {
@@ -192,12 +230,21 @@ public:
         // TODO: If mouseJoint is not null, use SetTarget() to update
         // its target to the given point.
 
+		if (mj)
+			mj->SetTarget(b2Vec2(worldPoint.x, worldPoint.y));
+
+		count++;
+
     }
 
     void detachMouse() {
 
         // TODO: If mouseJoint is not null, destroy it and set it to
         // null.
+		if(mj){
+			world->DestroyJoint(mj);
+			mj = nullptr;
+		}
 
     }
 

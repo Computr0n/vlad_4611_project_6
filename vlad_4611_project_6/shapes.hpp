@@ -50,12 +50,17 @@ public:
 
     }
     bool contains(vec2 worldPoint) {
-        return glm::length(worldPoint - center) <= radius;
+		b2Vec2 bodyPos = body->GetPosition();
+        return glm::length(worldPoint - vec2(bodyPos.x, bodyPos.y)) <= radius;
     }
 	mat4 getTransformation() {
 		b2Vec2 pos = body->GetPosition();
 		float angle = body->GetAngle();
 		return glm::translate(vec3(pos.x, pos.y, 0))*glm::rotate(angle, vec3(0, 0, 1));
+	}
+	vec2 getLocalPoint(vec2 worldPoint) {
+		b2Vec2 localpt = body->GetLocalPoint(b2Vec2(worldPoint.x, worldPoint.y));
+		return vec2(localpt.x, localpt.y);
 	}
     void destroy() {
 		body->DestroyFixture(fixture);
@@ -92,13 +97,20 @@ public:
 		fixture = body->CreateFixture(&fixturedef);
     }
     bool contains(vec2 worldPoint) {
-        vec2 d = worldPoint - center;
-        return (abs(d.x) <= size.x/2 && abs(d.y) <= size.y/2);
+		vec2 dl = getLocalPoint(worldPoint) - vec2();
+        //vec2 d = worldPoint - center;
+		//bool contains = (abs(d.x) <= size.x / 2 && abs(d.y) <= size.y / 2);
+		bool containsl = (abs(dl.x) <= size.x / 2 && abs(dl.y) <= size.y / 2);
+		return containsl;
     }
 	mat4 getTransformation() {
 		b2Vec2 pos = body->GetPosition();
 		float angle = body->GetAngle();
 		return glm::translate(vec3(pos.x, pos.y, 0))*glm::rotate(angle, vec3(0, 0, 1));
+	}
+	vec2 getLocalPoint(vec2 worldPoint) {
+		b2Vec2 localpt = body->GetLocalPoint(b2Vec2(worldPoint.x, worldPoint.y));
+		return vec2(localpt.x, localpt.y);
 	}
     void destroy() {
 		body->DestroyFixture(fixture);
@@ -138,6 +150,10 @@ public:
 		b2Vec2 pos = body->GetPosition();
 		float angle = body->GetAngle();
 		return glm::translate(vec3(pos.x, pos.y, 0))*glm::rotate(angle, vec3(0, 0, 1));
+	}
+	vec2 getLocalPoint(vec2 worldPoint) {
+		b2Vec2 localpt = body->GetLocalPoint(b2Vec2(worldPoint.x, worldPoint.y));
+		return vec2(localpt.x, localpt.y);
 	}
     void destroy() {
 		body->DestroyFixture(fixture);
